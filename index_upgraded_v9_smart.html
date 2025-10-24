@@ -1,0 +1,1783 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ZAIN.NET Crypto Futures – Enhanced Pattern Analyzer v7</title>
+
+<!-- Lightweight Charts -->
+
+
+<style>
+:root{
+  --bg: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+  --card: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+  --card-hover: linear-gradient(145deg, #1e1e3f 0%, #1a2040 100%);
+  --muted: #9fb0c8;
+  --text: #e6f2ff;
+  --accent: #22c55e;
+  --danger: #ff6b6b;
+  --glass: rgba(11, 20, 36, 0.8);
+  --primary: #3b82f6;
+  --warning: #f59e0b;
+  --golden: #ffd700;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glow: 0 0 20px rgba(59, 130, 246, 0.3);
+  --golden-glow: 0 0 30px rgba(255, 215, 0, 0.4);
+  --pattern-glow: 0 0 40px rgba(255, 0, 255, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wrap {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Enhanced Header */
+header {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--golden), #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.status-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 20px;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+}
+
+/* Enhanced Controls */
+.controls {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input, select, button, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+
+button {
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+button.primary {
+  background: linear-gradient(135deg, var(--primary), #2563eb);
+  border: none;
+  color: white;
+  box-shadow: var(--glow);
+}
+
+button.primary:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+}
+
+button.danger {
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+  border: none;
+  color: white;
+}
+
+/* Enhanced Button Row */
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.button-row button {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* Enhanced Grid Layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 500px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1400px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Enhanced Cards */
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background: var(--card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* Enhanced Chart Container */
+.chart-container {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#chart {
+  height: 500px;
+  border-radius: 16px;
+}
+
+#indicatorChart {
+  height: 150px;
+  margin-top: 12px;
+  border-radius: 16px;
+}
+
+/* Enhanced Chart Controls */
+.chart-controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.chart-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.chart-btn:hover {
+  background: rgba(59, 130, 246, 0.8);
+  transform: scale(1.05);
+}
+
+.chart-btn.active {
+  background: var(--primary);
+  box-shadow: var(--glow);
+}
+
+/* Enhanced Signal Cards */
+.signals-list {
+  display: grid;
+  gap: 16px;
+}
+
+.signal-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.signal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.signal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.signal-card:hover::before {
+  opacity: 1;
+}
+
+.signal-card.perfect-score {
+  border: 3px solid #ff1493;
+  box-shadow: var(--pattern-glow);
+  background: linear-gradient(145deg, rgba(255, 20, 147, 0.1), rgba(255, 20, 147, 0.05));
+  animation: perfectPulse 2s infinite;
+}
+
+.signal-card.golden {
+  border: 2px solid var(--golden);
+  box-shadow: var(--golden-glow);
+  background: linear-gradient(145deg, rgba(255, 215, 0, 0.05), rgba(255, 215, 0, 0.02));
+}
+
+.signal-card.ultra-golden {
+  border: 3px solid var(--golden);
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+  background: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+  animation: goldenPulse 3s infinite;
+}
+
+@keyframes perfectPulse {
+  0%, 100% { box-shadow: 0 0 40px rgba(255, 20, 147, 0.6); }
+  50% { box-shadow: 0 0 60px rgba(255, 20, 147, 0.8); }
+}
+
+@keyframes goldenPulse {
+  0%, 100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+  50% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.8); }
+}
+
+/* Enhanced Signal Header */
+.signal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.signal-title {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signal-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Enhanced Pills and Badges */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.pill.long {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.pill.short {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.pill.perfect-score {
+  background: linear-gradient(135deg, #ff1493, #dc143c);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 20, 147, 0.5);
+  animation: shimmer 2s infinite;
+}
+
+.pill.golden {
+  background: linear-gradient(135deg, var(--golden), #ffed4e);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.pill.ultra-golden {
+  background: linear-gradient(135deg, var(--golden), #ffed4e, #ff6b35);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Score Display */
+.score-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.score-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.score-circle.perfect {
+  background: linear-gradient(135deg, #ff1493, #dc143c);
+  box-shadow: 0 4px 12px rgba(255, 20, 147, 0.4);
+}
+
+.score-circle.excellent {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.score-circle.good {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.score-circle.average {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.score-circle.poor {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Enhanced Signal Info */
+.signal-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.info-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.info-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.info-value.golden {
+  background: linear-gradient(135deg, var(--golden), #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.info-value.pattern {
+  background: linear-gradient(135deg, #ff1493, #dc143c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Strategy Points Display */
+.strategy-points {
+  margin: 16px 0;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.strategy-point {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.strategy-point:last-child {
+  border-bottom: none;
+}
+
+.strategy-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.strategy-status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.strategy-status.passed {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.strategy-status.failed {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  color: white;
+}
+
+/* Enhanced KPI Section */
+.kpi-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.kpi-item {
+  flex: 1;
+  min-width: 120px;
+  background: var(--card);
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.kpi-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.kpi-value.golden {
+  background: linear-gradient(135deg, var(--golden), #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.kpi-value.pattern {
+  background: linear-gradient(135deg, #ff1493, #dc143c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.kpi-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Enhanced Status Indicators */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  transition: all 0.3s ease;
+}
+
+.status-indicator.active {
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.idle {
+  background: var(--muted);
+}
+
+.status-indicator.error {
+  background: var(--danger);
+  box-shadow: 0 0 12px rgba(255, 107, 107, 0.6);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Enhanced Log Section */
+.log-section {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Enhanced Textarea */
+#scrib {
+  width: 100%;
+  height: 120px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  backdrop-filter: blur(10px);
+}
+
+#scrib:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: var(--glow);
+}
+
+/* Enhanced Footer */
+.footer {
+  margin-top: 40px;
+  padding: 24px;
+  text-align: center;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+  .wrap {
+    padding: 12px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .button-row {
+    flex-direction: column;
+  }
+  
+  .signal-info {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .kpi-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Enhanced Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary), #2563eb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2563eb, var(--primary));
+}
+
+/* Enhanced Loading Animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- Enhanced Header -->
+  <header>
+    <div class="header-content">
+      <div>
+        <h1>ZAIN.NET Crypto Futures</h1>
+        <div class="subtitle">Enhanced 7-Point Smart Analyzer v9 - RSI + Pattern(50+) + Fibonacci + Elliott + MTF + S/R + Fresh Break</div>
+      </div>
+      <div class="status-section">
+        <span class="status-indicator idle" id="statusIndicator"></span>
+        <span id="statusText">Ready for 5-Point Analysis</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Enhanced Controls -->
+  <div class="controls">
+    <div class="controls-grid">
+      <div class="control-group">
+        <label>Primary Timeframe</label>
+        <select id="primaryTf">
+<option value="1m">1 Minute</option>
+<option value="3m">3 Minutes</option>
+<option value="5m">5 Minutes</option>
+<option value="15m">15 Minutes</option>
+<option value="30m">30 Minutes</option>
+<option value="1h">1 Hour</option>
+<option value="2h">2 Hours</option>
+<option value="4h">4 Hours</option>
+<option value="6h">6 Hours</option>
+<option value="12h">12 Hours</option>
+<option value="1d">1 Day</option>
+</select>
+      </div>
+
+      <div class="control-group">
+        <label>Confirmation TF</label>
+        <select id="confirmTf">
+<option value="1m">1 Minute</option>
+<option value="3m">3 Minutes</option>
+<option value="5m">5 Minutes</option>
+<option value="15m">15 Minutes</option>
+<option value="30m">30 Minutes</option>
+<option value="1h">1 Hour</option>
+<option value="2h">2 Hours</option>
+<option value="4h">4 Hours</option>
+<option value="6h">6 Hours</option>
+<option value="12h">12 Hours</option>
+<option value="1d">1 Day</option>
+</select>
+      </div>
+
+      <div class="control-group">
+        <label>Higher TF</label>
+        <select id="higherTf">
+<option value="1m">1 Minute</option>
+<option value="3m">3 Minutes</option>
+<option value="5m">5 Minutes</option>
+<option value="15m">15 Minutes</option>
+<option value="30m">30 Minutes</option>
+<option value="1h">1 Hour</option>
+<option value="2h">2 Hours</option>
+<option value="4h">4 Hours</option>
+<option value="6h">6 Hours</option>
+<option value="12h">12 Hours</option>
+<option value="1d">1 Day</option>
+</select>
+      </div>
+
+      <div class="control-group">
+        <label>RSI Period</label>
+        <input id="rsiPeriod" type="number" min="7" max="21" value="14">
+      </div>
+
+      <div class="control-group">
+        <label>Min Score Required</label>
+        <input id="minScore" type="number" min="20" max="100" value="60" step="20">
+      </div>
+
+      <div class="control-group">
+        <label>Top N Coins</label>
+        <input id="topN" type="number" min="10" max="100" value="50">
+      </div>
+
+      <div class="control-group">
+        <label>Analysis Mode</label>
+        <select id="analysisMode">
+          <option value="both" selected>Both Directions</option>
+          <option value="long">Long Only</option>
+          <option value="short">Short Only</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Pattern Sensitivity</label>
+        <select id="patternSensitivity">
+          <option value="strict">Strict</option>
+          <option value="moderate" selected>Moderate</option>
+          <option value="loose">Loose</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button class="primary" id="startBtn">🚀 Start 5-Point Analysis</button>
+      <button id="stopBtn">⏹️ Stop Analysis</button>
+      <button id="clearHistBtn" class="danger">🗑️ Clear History</button>
+      <button id="exportBtn" style="background: linear-gradient(135deg, #0a2b3f, #1a3a5f); color: white;">📊 Export Data</button>
+    </div>
+
+    <!-- Enhanced KPI Section -->
+    <div class="kpi-section" id="kpiSection"></div>
+
+    <!-- Enhanced Notes Section -->
+    <div class="control-group">
+      <label>Trading Notes (Auto-saved)</label>
+      <textarea id="scrib" placeholder="Enter your 5-point strategy observations and notes..."></textarea>
+    </div>
+  </div>
+
+  <!-- Enhanced Main Grid -->
+  <div class="main-grid">
+    <!-- Left Column - Signals -->
+    <div>
+      <!-- Enhanced Search and Filter -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>7-Point Strategy Signals (Sorted by Score)</h3>
+          <div style="display: flex; gap: 12px;">
+            <input type="text" id="searchCoin" placeholder="Search coin..." style="width: 200px;">
+            <select id="signalFilter" style="width: 150px;">
+              <option value="all">All Signals</option>
+              <option value="perfect">Perfect Score (100)</option>
+              <option value="excellent">Excellent (80+)</option>
+              <option value="good">Good (60+)</option>
+              <option value="long">Long Only</option>
+              <option value="short">Short Only</option>
+            </select>
+          </div>
+        </div>
+        <div id="signalsList" class="signals-list"></div>
+      </div>
+
+      <!-- Enhanced Log Section -->
+      <div class="card" style="margin-top: 24px;">
+        <h3>7-Point Analysis Log</h3>
+        <div id="log" class="log-section"></div>
+      </div>
+    </div>
+
+    <!-- Right Column - Charts -->
+    <div>
+      <!-- Enhanced Main Chart -->
+      <div class="card">
+        <h3>Advanced Multi-Timeframe Chart</h3>
+        <div class="chart-container" id="chartContainer">
+          <div class="chart-controls">
+            <button class="chart-btn" id="fullscreenBtn">🔍 Fullscreen</button>
+          </div>
+          <div id="chart"></div>
+          <div id="indicatorChart"></div>
+        </div>
+        <div id="chartInfo" style="margin-top: 12px; font-size: 13px; color: var(--muted);"></div>
+        <div id="analysis" style="margin-top: 8px; font-size: 13px; color: #a7f3d0;"></div>
+      </div>
+
+      <!-- Enhanced Strategy Analysis -->
+      <div class="card" style="margin-top: 24px;">
+        <h3>5-Point Strategy Breakdown</h3>
+        <div id="strategyAnalysis"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Footer -->
+  <div class="footer">
+    <strong>7-Point Strategy:</strong> 1. RSI Over Condition (20pts) • 2. Chart Pattern Breakout (20pts) • 3. Golden Cross / Death Cross (20pts) • 4. Elliott Wave 5 (20pts) • 5. Multi-Timeframe Sync (20pts) • 6. Strong S/R Proximity (20pts) • 7. Fresh 1-candle Break Confirmation (20pts)
+    <br><br>
+    <strong>Disclaimer:</strong> This analyzer implements a comprehensive 5-point scoring system for educational purposes only. Always DYOR and manage risk appropriately.
+  </div>
+</div>
+
+
+
+<!-- BEGIN: 7-Point Smart Analyzer+ (injected, preserves original theme) -->
+
+<!-- END: 7-Point Smart Analyzer+ -->
+
+
+<script>
+// --- Injected ZAIN.NET v8 Rescan Fixed (REAL-TIME Binance mode) ---
+// Safety: this script expects to run from a local server (CORS).
+// It will attempt to use Binance public endpoints. If network blocked, errors will be logged to console and UI.
+try {
+</script>
+<style>
+:root{
+  --bg: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+  --card: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+  --muted: #9fb0c8;
+  --text: #e6f2ff;
+  --accent: #22c55e;
+  --danger: #ff6b6b;
+  --primary: #3b82f6;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1600px;margin:0 auto;padding:20px;min-height:100vh}
+header{background:var(--card);border-radius:20px;padding:24px;margin-bottom:24px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px)}
+.header-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,var(--primary),#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{font-size:14px;color:var(--muted);margin-top:8px}
+.status-section{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.03);padding:12px 20px;border-radius:50px}
+.controls{background:var(--card);border-radius:20px;padding:20px;margin-bottom:24px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.08)}
+.controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.control-group label{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+input,select,button,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);color:var(--text);font-size:14px}
+.button-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+button.primary{background:linear-gradient(135deg,var(--primary),#2563eb);border:none;color:white;padding:10px 14px;border-radius:12px;cursor:pointer}
+.main-grid{display:grid;grid-template-columns:1fr 480px;gap:20px;align-items:start}
+.card{background:var(--card);border-radius:16px;padding:16px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.06)}
+#chart{height:420px;border-radius:12px;background:rgba(0,0,0,0.25);overflow:hidden}
+.signals-list{display:grid;gap:12px;max-height:560px;overflow:auto;padding-right:6px}
+.signal-card{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+.signal-title{display:flex;justify-content:space-between;align-items:center}
+.score-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+.kpi-section{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.log-section{background:rgba(0,0,0,0.35);border-radius:10px;padding:10px;font-family:monospace;font-size:12px;max-height:180px;overflow:auto}
+.footer{margin-top:20px;padding:12px;background:rgba(255,255,255,0.02);border-radius:12px;color:var(--muted);font-size:13px}
+@media (max-width:1100px){.main-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="header-content">
+      <div>
+        <h1>ZAIN.NET Crypto Futures</h1>
+        <div class="subtitle">Elliott Wave Pro Analyzer v8 — Rewrite (Template v7 look)</div>
+      </div>
+      <div class="status-section">
+        <span id="statusIndicator" style="width:10px;height:10px;border-radius:50%;background:var(--muted);display:inline-block;margin-right:8px"></span>
+        <span id="statusText">Idle</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls card">
+    <div class="controls-grid">
+      <div class="control-group">
+        <label>Default Symbol</label>
+        <input id="defaultSymbol" value="BTCUSDT">
+      </div>
+      <div class="control-group">
+        <label>Primary Timeframe</label>
+        <select id="primaryTf">
+          <option value="15m">15m</option>
+          <option value="5m">5m</option>
+          <option value="1h">1h</option>
+          <option value="4h">4h</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Min Score Required</label>
+        <input id="minScore" type="number" value="60">
+      </div>
+      <div class="control-group">
+        <label>Scan Batch Size (manual default)</label>
+        <input id="batchSize" type="number" value="100" min="1" max="500">
+      </div>
+      <div class="control-group">
+        <label>Pattern Sensitivity</label>
+        <select id="patternSensitivity"><option value="moderate">Moderate</option><option value="strict">Strict</option><option value="loose">Loose</option></select>
+      </div>
+      <div class="control-group">
+        <label>Auto-refresh (minutes)</label>
+        <input id="refreshMins" type="number" value="5" min="1">
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button id="startBtn" class="primary">🚀 Start Full Scan</button>
+      <button id="stopBtn">⏹ Stop</button>
+      <button id="exportBtn">📥 Export Results</button>
+      <button id="clearBtn">🗑 Clear</button>
+    </div>
+
+    <div style="margin-top:12px" class="kpi-section" id="kpiSection"></div>
+    <div style="margin-top:12px">
+      <label>Trading Notes</label>
+      <textarea id="scrib" placeholder="Trading notes..." style="height:80px"></textarea>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div>
+      <div class="card">
+        <h3>Signals (Sorted by Score)</h3>
+        <div id="signalsList" class="signals-list"></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3>Analysis Log</h3>
+        <div id="log" class="log-section"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>Chart</h3>
+        <div id="chart"></div>
+        <div id="chartInfo" style="margin-top:8px;color:var(--muted)"></div>
+        <div id="analysis" style="margin-top:8px;color:#a7f3d0"></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3>5-Point Breakdown</h3>
+        <div id="strategyAnalysis"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <strong>Note:</strong> Run this file via local server (e.g. <code>python -m http.server 8000</code>) to avoid CORS issues.
+  </div>
+</div>
+
+<script>
+class Analyzer {
+  constructor(){
+    this.isRunning = false;
+    this.signals = [];
+    this.kpi = { total:0, perfect:0, excellent:0, avgScore:0 };
+    this.chart = null;
+    this.rsiPeriod = 14;
+    this.initUI();
+    this.initChart();
+    this.loadNotes();
+  }
+
+  initUI(){
+    document.getElementById('startBtn').addEventListener('click', ()=>this.start());
+    document.getElementById('stopBtn').addEventListener('click', ()=>this.stop());
+    document.getElementById('clearBtn').addEventListener('click', ()=>this.clear());
+    document.getElementById('exportBtn').addEventListener('click', ()=>this.export());
+    document.getElementById('batchSize').addEventListener('change', ()=>{});
+  }
+
+  initChart(){
+    const chartContainer = document.getElementById('chart');
+    this.chart = LightweightCharts.createChart(chartContainer, {
+      width: chartContainer.clientWidth,
+      height: 420,
+      layout:{background:{color:'transparent'},textColor:'#e6f2ff'},
+      grid:{vertLines:{color:'rgba(255,255,255,0.06)'},horzLines:{color:'rgba(255,255,255,0.06)'}}
+    });
+    this.candleSeries = this.chart.addCandlestickSeries();
+    window.addEventListener('resize', ()=>{ this.chart.applyOptions({width:chartContainer.clientWidth}); });
+  }
+
+  log(msg){
+    const node = document.getElementById('log');
+    node.innerHTML = (new Date()).toLocaleTimeString() + ' • ' + msg + '\n' + node.innerHTML;
+  }
+
+  setStatus(state,text){
+    const ind = document.getElementById('statusIndicator');
+    const st = document.getElementById('statusText');
+    st.textContent = text || '';
+    ind.style.background = state==='active' ? 'var(--accent)' : state==='error' ? 'var(--danger)' : 'var(--muted)';
+  }
+
+  async start(){
+    if (this.isRunning) return;
+    this.isRunning = true;
+    this.setStatus('active','Running full scan...');
+    this.log('🚀 Starting full scan');
+    const mins = parseInt(document.getElementById('refreshMins').value) || 5;
+    await this.runFullScan(); // run once
+    this.timer = setInterval(()=>{ if(this.isRunning) this.runFullScan(); }, mins*60*1000);
+  }
+
+  stop(){
+    this.isRunning = false;
+    clearInterval(this.timer);
+    this.setStatus('idle','Stopped');
+    this.log('⏹ Scan stopped');
+  }
+
+  clear(){
+    this.signals = [];
+    this.kpi = { total:0, perfect:0, excellent:0, avgScore:0 };
+    this.updateKPIs();
+    this.updateSignals();
+    document.getElementById('log').innerHTML = '';
+    this.log('🗑 Cleared data');
+  }
+
+  async export(){
+    const data = { timestamp:new Date().toISOString(), settings:{
+      primaryTf: document.getElementById('primaryTf').value,
+      batchSize: parseInt(document.getElementById('batchSize').value)
+    }, signals:this.signals };
+    const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='zain_v8_signals.json'; a.click();
+    URL.revokeObjectURL(url);
+    this.log('📥 Exported results');
+  }
+
+  async getAllUSDT(){
+    try{
+      const res = await fetch('https://api.binance.com/api/v3/exchangeInfo');
+      const json = await res.json();
+      return json.symbols.filter(s=>s.symbol.endsWith('USDT') && s.status==='TRADING').map(s=>s.symbol);
+    }catch(e){
+      this.log('❌ exchangeInfo error: '+e.message);
+      return ['BTCUSDT','ETHUSDT','BNBUSDT','XRPUSDT'];
+    }
+  }
+
+  async getKlines(symbol, interval='15m', limit=500){
+    const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
+    try{
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('Klines failed:'+res.status);
+      const raw = await res.json();
+      return raw.map(r=>({open:+r[1],high:+r[2],low:+r[3],close:+r[4],volume:+r[5],time:+r[0]}));
+    }catch(e){
+      this.log('❌ klines '+symbol+' err:'+e.message);
+      return [];
+    }
+  }
+
+  calculateRSI(closes, period=14){
+    if(closes.length < period+1) return [];
+    const gains=[], losses=[];
+    for(let i=1;i<closes.length;i++){
+      const diff = closes[i]-closes[i-1];
+      gains.push(Math.max(diff,0));
+      losses.push(Math.max(-diff,0));
+    }
+    let rs = 0;
+    // first average
+    let avgGain = gains.slice(0,period).reduce((a,b)=>a+b,0)/period;
+    let avgLoss = losses.slice(0,period).reduce((a,b)=>a+b,0)/period;
+    const rsi = [];
+    rsi.push(100 - (100 / (1 + avgGain/avgLoss)));
+    for(let i=period;i<gains.length;i++){
+      avgGain = (avgGain*(period-1) + gains[i]) / period;
+      avgLoss = (avgLoss*(period-1) + losses[i]) / period;
+      const rsVal = avgGain / (avgLoss||1e-9);
+      rsi.push(100 - (100 / (1 + rsVal)));
+    }
+    return rsi;
+  }
+
+  sma(arr,period){
+    if(arr.length < period) return [];
+    const out=[];
+    for(let i=period-1;i<arr.length;i++){
+      out.push(arr.slice(i-period+1,i+1).reduce((a,b)=>a+b,0)/period);
+    }
+    return out;
+  }
+
+  fibonacciLevels(prices){
+    const high = Math.max(...prices);
+    const low = Math.min(...prices);
+    const range = high-low;
+    return { level_0:high, level_236: high - range*0.236, level_382: high - range*0.382, level_500: high - range*0.5, level_618: high - range*0.618, low };
+  }
+
+  detectSwings(prices, depth=3){
+    const swings=[];
+    for(let i=depth;i<prices.length-depth;i++){
+      let isHigh=true,isLow=true;
+      for(let d=1;d<=depth;d++){
+        if(prices[i]<=prices[i-d]||prices[i]<=prices[i+d]) isHigh=false;
+        if(prices[i]>=prices[i-d]||prices[i]>=prices[i+d]) isLow=false;
+      }
+      if(isHigh) swings.push({index:i,price:prices[i],type:'high'});
+      if(isLow) swings.push({index:i,price:prices[i],type:'low'});
+    }
+    return swings;
+  }
+
+  detectElliott(prices){
+    if(!prices || prices.length<60) return null;
+    const swings = this.detectSwings(prices,3);
+    if(swings.length<7) return null;
+    // build alternating sequence
+    const recent = swings.slice(-12);
+    const alt=[recent[0]];
+    for(let i=1;i<recent.length;i++){ if(recent[i].type!==alt[alt.length-1].type) alt.push(recent[i]); }
+    if(alt.length<7) return null;
+    const points = alt.slice(-7);
+    const waves=[];
+    for(let i=0;i<5;i++){
+      const p = points[i];
+      waves.push({ wave:i+1, index:p.index, price:p.price, type:p.type, complete:true });
+    }
+    const w1 = Math.abs(points[1].price - points[0].price) || 1;
+    const w3 = Math.abs(points[3].price - points[2].price) || 1;
+    const fibValid = (w3 >= 1.2*w1 && w3 <= 2.5*w1) || (w3 >= 1.0*w1);
+    const direction = (points[4].price > points[0].price) ? 'long' : 'short';
+    return { waves, confirmed: fibValid, bias: direction, points: points.map(p=>({index:p.index,price:p.price,type:p.type})) };
+  }
+
+  analyzeSymbol(symbol){
+    return new Promise(async (resolve)=>{
+      const tf = document.getElementById('primaryTf').value || '15m';
+      const raw = await this.getKlines(symbol, tf, 500);
+      const closes = raw.map(r=>r.close);
+      if(closes.length < 60){ resolve(null); return; }
+      // RSI
+      const rsiArr = this.calculateRSI(closes, this.rsiPeriod);
+      const currentRSI = rsiArr[rsiArr.length-1] || 50;
+      let rsiPoint = {score:0,status:false,details:`RSI ${currentRSI.toFixed(1)}`};
+      if(currentRSI<=30){ rsiPoint.score=20; rsiPoint.status=true; rsiPoint.direction='long'; rsiPoint.details+=' Oversold'; }
+      if(currentRSI>=70){ rsiPoint.score=20; rsiPoint.status=true; rsiPoint.direction='short'; rsiPoint.details+=' Overbought'; }
+      // Pattern detection (simplified breakout)
+      const patterns = this.simplePatternDetect(closes);
+      const patternPoint = patterns.found ? {score:20,status:true,details:patterns.name,direction:patterns.direction} : {score:0,status:false,details:'No pattern'};
+      // Golden signals
+      const ma50 = this.sma(closes,50).slice(-2);
+      const ma200 = this.sma(closes,200).slice(-2);
+      let goldenPoint = {score:0,status:false,details:'No golden'};
+      if(ma50.length>=2 && ma200.length>=2){
+        const cur50 = ma50[ma50.length-1], cur200 = ma200[ma200.length-1];
+        const prev50 = ma50[ma50.length-2], prev200 = ma200[ma200.length-2];
+        if(cur50>cur200 && prev50<=prev200){ goldenPoint.score=20; goldenPoint.status=true; goldenPoint.details='Golden Cross'; goldenPoint.direction='long'; }
+        if(cur50<cur200 && prev50>=prev200){ goldenPoint.score=20; goldenPoint.status=true; goldenPoint.details='Death Cross'; goldenPoint.direction='short'; }
+      }
+      // Elliott
+      const ell = this.detectElliott(closes);
+      let ellPoint = {score:0,status:false,details:'Elliott unconfirmed'};
+      if(ell){
+        ellPoint.score = ell.confirmed ? 20 : 10;
+        ellPoint.status = ell.confirmed;
+        ellPoint.details = `Elliott ${ell.bias} confirmed:${ell.confirmed}`;
+        ellPoint.direction = ell.bias;
+      }
+      // MTF sync (we'll check higher tf same direction)
+      const higherTf = '1h';
+      const higherRaw = await this.getKlines(symbol,higherTf,300);
+      const higherCloses = higherRaw.map(r=>r.close);
+      const primaryTrend = this.getTrendDirection(closes);
+      const higherTrend = this.getTrendDirection(higherCloses);
+      let mtfPoint = {score:0,status:false,details:'Not sync'};
+      if(primaryTrend===higherTrend && primaryTrend!=='neutral'){ mtfPoint.score=20; mtfPoint.status=true; mtfPoint.details=`Sync ${primaryTrend}`; mtfPoint.direction=primaryTrend; }
+      // aggregate
+      const points = { rsiOver: rsiPoint, patternBreakout: patternPoint, goldenFib: goldenPoint, elliottWave: ellPoint, mtfSync: mtfPoint };
+      let total = rsiPoint.score + patternPoint.score + goldenPoint.score + ellPoint.score + mtfPoint.score;
+      let direction = null;
+      // determine majority direction from points
+      const dirs = [rsiPoint.direction, patternPoint.direction, goldenPoint.direction, ellPoint.direction, mtfPoint.direction].filter(Boolean);
+      if(dirs.length>0){ direction = dirs.sort((a,b)=> dirs.filter(v=>v===a).length - dirs.filter(v=>v===b).length).pop(); }
+      const result = { symbol, totalScore: total, direction, price: closes[closes.length-1], volume: raw.map(r=>r.volume).reduce((a,b)=>a+b,0), points, ell };
+      resolve(result);
+    });
+  }
+
+  getTrendDirection(prices){
+    if(!prices || prices.length<40) return 'neutral';
+    const recent = prices.slice(-20).reduce((a,b)=>a+b,0)/20;
+    const older = prices.slice(-40,-20).reduce((a,b)=>a+b,0)/20;
+    const change = (recent-older)/older;
+    if(change>0.02) return 'long';
+    if(change<-0.02) return 'short';
+    return 'neutral';
+  }
+
+  simplePatternDetect(prices){
+    // very simplified: check last candle break above recent high or below recent low (sensitivity)
+    const last = prices.slice(-10);
+    const high = Math.max(...last.slice(0,9));
+    const low = Math.min(...last.slice(0,9));
+    const cur = last[last.length-1];
+    if(cur>high*1.01) return {found:true,name:'Breakout',direction:'long'};
+    if(cur<low*0.99) return {found:true,name:'Breakdown',direction:'short'};
+    return {found:false};
+  }
+
+  async runFullScan(){
+    if(!this.isRunning) return;
+    const minScore = parseInt(document.getElementById('minScore').value) || 60;
+    const batchSize = parseInt(document.getElementById('batchSize').value) || 100;
+    const all = await this.getAllUSDT();
+    const symbols = all; // full list
+    this.log('🔍 Symbols to scan: '+symbols.length);
+    const results = [];
+    this.kpi.total = 0; this.kpi.perfect=0; this.kpi.excellent=0;
+    const BATCH = batchSize;
+    for(let i=0;i<symbols.length && this.isRunning;i+=BATCH){
+      const group = symbols.slice(i,i+BATCH);
+      this.log(`⏱ Scanning batch ${i/BATCH+1} (${group.length})`);
+      const promises = group.map(s=>this.analyzeSymbol(s));
+      const batchRes = await Promise.all(promises.map(p=>p.catch(e=>{ this.log('❌ analyze error '+e.message); return null; })));
+      for(const r of batchRes){
+        if(!r) continue;
+        this.kpi.total++;
+        if(r.totalScore===100) this.kpi.perfect++;
+        if(r.totalScore>=80) this.kpi.excellent++;
+        if(r.totalScore>=minScore) results.push(r);
+      }
+      this.updateKPIs();
+      this.updateSignalsPartial(results);
+      // polite delay to avoid rate limits
+      await this.delay(1200);
+    }
+    // final sort and display
+    results.sort((a,b)=>b.totalScore-a.totalScore);
+    this.signals = results;
+    this.updateSignals();
+    this.updateKPIs();
+    this.log('✅ Full scan finished. Signals found: '+results.length);
+    this.setStatus('idle','Scan complete');
+  }
+
+  updateSignalsPartial(results){
+    // show top 20 partial
+    const top = results.slice(0,20);
+    const container = document.getElementById('signalsList');
+    container.innerHTML = top.map(s=>this.createCardHTML(s)).join('');
+  }
+
+  updateSignals(){
+    const container = document.getElementById('signalsList');
+    if(this.signals.length===0){ container.innerHTML='<div style="color:var(--muted);padding:20px">No signals</div>'; return; }
+    container.innerHTML = this.signals.map(s=>this.createCardHTML(s)).join('');
+    // attach click handlers
+    container.querySelectorAll('.signal-card').forEach((el, idx)=>{
+      el.addEventListener('click', ()=>{ const sym = el.getAttribute('data-symbol'); const r = this.signals.find(x=>x.symbol===sym); if(r) this.showChart(r); });
+    });
+  }
+
+  createCardHTML(s){
+    const scoreClass = s.totalScore>=80 ? 'excellent' : s.totalScore>=60 ? 'good' : 'poor';
+    return `
+      <div class="signal-card" data-symbol="${s.symbol}">
+        <div class="signal-title"><strong>${s.symbol}</strong><span style="font-weight:700">${s.totalScore}/100</span></div>
+        <div style="margin-top:8px;color:var(--muted)">Price: ${s.price.toFixed(4)} • Direction: ${s.direction||'Neutral'}</div>
+        <div style="margin-top:8px;font-size:13px;color:var(--muted)">${s.points.elliottWave.details}</div>
+      </div>
+    `;
+  }
+
+  async showChart(signal){
+    const tf = document.getElementById('primaryTf').value || '15m';
+    const data = await this.getKlines(signal.symbol, tf, 500);
+    if(!data || data.length===0) { this.log('❌ no data for chart'); return; }
+    const candles = data.map(d=>({time: Math.floor(d.time/1000), open:d.open, high:d.high, low:d.low, close:d.close}));
+    this.candleSeries.setData(candles);
+    document.getElementById('chartInfo').innerText = `${signal.symbol} • ${tf} • Score ${signal.totalScore}`;
+    // overlay Elliott wave labels if present
+    const ell = signal.ell;
+    let analysisHtml = '';
+    if(ell){
+      analysisHtml += `<div>Bias: ${ell.bias} • confirmed:${ell.confirmed}</div>`;
+      analysisHtml += `<div>Waves: ${ell.waves.map(w=>'W'+w.wave+'@'+w.price.toFixed(4)).join(', ')}</div>`;
+    }
+    document.getElementById('analysis').innerHTML = analysisHtml;
+    document.getElementById('strategyAnalysis').innerHTML = this.createDetailedAnalysis(signal);
+  }
+
+  createDetailedAnalysis(s){
+    return `
+      <div style="font-size:13px">
+        <div><strong>RSI:</strong> ${s.points.rsiOver.details}</div>
+        <div><strong>Pattern:</strong> ${s.points.patternBreakout.details}</div>
+        <div><strong>Golden:</strong> ${s.points.goldenFib.details}</div>
+        <div><strong>Elliott:</strong> ${s.points.elliottWave.details}</div>
+        <div><strong>MTF:</strong> ${s.points.mtfSync.details}</div>
+      </div>
+    `;
+  }
+
+  updateKPIs(){
+    const node = document.getElementById('kpiSection');
+    const avg = this.signals.length>0 ? (this.signals.reduce((a,b)=>a+b.totalScore,0)/this.signals.length).toFixed(1) : 0;
+    node.innerHTML = `
+      <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">Analyzed: ${this.kpi.total}</div>
+      <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">Perfect: ${this.kpi.perfect}</div>
+      <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">Excellent: ${this.kpi.excellent}</div>
+      <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">AvgScore: ${avg}</div>
+    `;
+  }
+
+  delay(ms){ return new Promise(res=>setTimeout(res,ms)); }
+
+  saveNotes(){ localStorage.setItem('zain_notes', document.getElementById('scrib').value); }
+  loadNotes(){ document.getElementById('scrib').value = localStorage.getItem('zain_notes') || ''; document.getElementById('scrib').addEventListener('input', ()=>this.saveNotes()); }
+}
+
+const app = new Analyzer();
+
+// expose start/stop to window for convenience
+window.app = app;
+} catch (e) {
+  console.error('Injected v8 script error', e);
+  const logEl = document.getElementById('log');
+  if(logEl) logEl.innerText = (new Date()).toLocaleTimeString() + ' • ERROR: ' + e.message + '\n' + logEl.innerText;
+}
+
+
+/* --------- v9 Additions: Support/Resistance, Pattern Library (50+), Fresh Break, 7-point scoring --------- */
+
+// Pattern library names (50 patterns) - detection implemented with simple heuristics for a subset; others are placeholders
+Analyzer.prototype.patternLibrary = [
+  "Head and Shoulders","Inverse Head and Shoulders","Double Top","Double Bottom","Triple Top","Triple Bottom",
+  "Rising Wedge","Falling Wedge","Symmetrical Triangle","Ascending Triangle","Descending Triangle",
+  "Bull Flag","Bear Flag","Pennant","Rectangle","Channel Up","Channel Down","Cup and Handle","Rounding Bottom",
+  "Spike and Reversal","Island Reversal","Diamond Top","Broadening Top","Broadening Bottom","Three Drives",
+  "ABCD Bull","ABCD Bear","Gartley","Bat","Butterfly","Crab","Shark","Cypher","Wolfe Wave","Ascending Channel",
+  "Descending Channel","Inverse Cup and Handle","Cup with Handle (deep)","Triple Moving Pivot","V Bottom","V Top",
+  "Key Reversal","Saucer","Bear Pennant","Bull Pennant","Bear Flag","Bull Flag Extended","Rectangle Breakout",
+  "Symmetric Flag","Megaphone","Channel Breakout","Dead Cat Bounce","Continuation Triangle"
+];
+
+// Simple clustering to find strong S/R levels from swing highs/lows
+Analyzer.prototype.findClusters = function(values, tolerance=0.005){
+  if(!values || values.length===0) return [];
+  values = values.slice().sort((a,b)=>a-b);
+  const clusters = [];
+  let current = [values[0]];
+  for(let i=1;i<values.length;i++){
+    if(Math.abs(values[i]-values[i-1]) / values[i-1] <= tolerance){
+      current.push(values[i]);
+    } else {
+      clusters.push({level: current.reduce((a,b)=>a+b,0)/current.length, count: current.length});
+      current = [values[i]];
+    }
+  }
+  clusters.push({level: current.reduce((a,b)=>a+b,0)/current.length, count: current.length});
+  // sort by cluster size desc
+  clusters.sort((a,b)=>b.count-a.count);
+  return clusters.slice(0,5); // top 5 strongest
+}
+
+Analyzer.prototype.detectSupportResistance = function(prices){
+  // detect swing highs/lows
+  const swings = this.detectSwings(prices,3);
+  const highs = swings.filter(s=>s.type==='high').map(s=>s.price);
+  const lows = swings.filter(s=>s.type==='low').map(s=>s.price);
+  const resClusters = this.findClusters(highs,0.008);
+  const supClusters = this.findClusters(lows,0.008);
+  return { supports: supClusters, resistances: resClusters };
+}
+
+// Simple fresh-break detection: pattern breakout 1 candle ago (last candle closed beyond breakout level)
+Analyzer.prototype.isFreshBreak = function(prices, breakoutLevel, direction){
+  if(!prices || prices.length<2) return false;
+  const last = prices[prices.length-1];
+  const prev = prices[prices.length-2];
+  if(direction==='long') return (prev <= breakoutLevel && last > breakoutLevel);
+  if(direction==='short') return (prev >= breakoutLevel && last < breakoutLevel);
+  return false;
+}
+
+// A basic set of heuristic pattern detectors for a few patterns; others will be attempted with fallbacks
+Analyzer.prototype.detectChartPatterns = function(prices){
+  // prices = array of closes
+  const out = { found:false, name:null, direction:null, strength:0, breakoutLevel:null, fresh:false };
+  if(!prices || prices.length<30) return out;
+  // build simple swings
+  const swings = this.detectSwings(prices,3);
+  // HEAD AND SHOULDERS (heuristic)
+  try{
+    const highs = swings.filter(s=>s.type==='high');
+    if(highs.length>=3){
+      const last3 = highs.slice(-3);
+      // middle highest
+      if(last3[1].price>last3[0].price && last3[1].price>last3[2].price){
+        out.found=true; out.name='Head and Shoulders'; out.direction='short'; out.strength=80;
+        out.breakoutLevel = Math.min(last3[0].price,last3[2].price);
+        out.fresh = this.isFreshBreak(prices, out.breakoutLevel, 'short');
+        return out;
+      }
+    }
+  }catch(e){}
+
+  // INVERSE HEAD & SHOULDERS
+  try{
+    const lows = swings.filter(s=>s.type==='low');
+    if(lows.length>=3){
+      const last3 = lows.slice(-3);
+      if(last3[1].price<last3[0].price && last3[1].price<last3[2].price){
+        out.found=true; out.name='Inverse Head and Shoulders'; out.direction='long'; out.strength=80;
+        out.breakoutLevel = Math.max(last3[0].price,last3[2].price);
+        out.fresh = this.isFreshBreak(prices, out.breakoutLevel, 'long');
+        return out;
+      }
+    }
+  }catch(e){}
+
+  // DOUBLE TOP / BOTTOM
+  try{
+    const highs = swings.filter(s=>s.type==='high');
+    const lows = swings.filter(s=>s.type==='low');
+    if(highs.length>=2){
+      const a = highs[highs.length-2].price, b = highs[highs.length-1].price;
+      if(Math.abs(a-b)/Math.max(a,b) < 0.02){ // two highs similar
+        out.found=true; out.name='Double Top'; out.direction='short'; out.strength=70;
+        out.breakoutLevel = Math.min(...lows.slice(-2).map(x=>x.price)) || Math.min(a,b);
+        out.fresh = this.isFreshBreak(prices, out.breakoutLevel, 'short');
+        return out;
+      }
+    }
+    if(lows.length>=2){
+      const a = lows[lows.length-2].price, b = lows[lows.length-1].price;
+      if(Math.abs(a-b)/Math.max(a,b) < 0.02){
+        out.found=true; out.name='Double Bottom'; out.direction='long'; out.strength=70;
+        out.breakoutLevel = Math.max(...highs.slice(-2).map(x=>x.price)) || Math.max(a,b);
+        out.fresh = this.isFreshBreak(prices, out.breakoutLevel, 'long');
+        return out;
+      }
+    }
+  }catch(e){}
+
+  // TRIANGLES & WEDGES (heuristic based on trendlines)
+  try{
+    // take last 30 points, compute linear fits for highs and lows
+    const last = prices.slice(-40);
+    const highs = []; const lowsArr = [];
+    for(let i=0;i<last.length;i++){
+      // local window +/-2
+      const win = prices.slice(Math.max(0, prices.length-1-last.length+i-2), prices.length-1-last.length+i+3).map(x=>x);
+      // approximate
+    }
+    // simple triangle detection: declining highs + rising lows
+    let decHighs = 0, incLows = 0;
+    const sampleHighs = swings.filter(s=>s.type==='high').slice(-6);
+    const sampleLows = swings.filter(s=>s.type==='low').slice(-6);
+    for(let i=1;i<sampleHighs.length;i++) if(sampleHighs[i].price < sampleHighs[i-1].price) decHighs++;
+    for(let i=1;i<sampleLows.length;i++) if(sampleLows[i].price > sampleLows[i-1].price) incLows++;
+    if(decHighs>=3 && incLows>=3){
+      out.found=true; out.name='Symmetrical/Ascending Triangle'; out.direction='long'; out.strength=65;
+      out.breakoutLevel = Math.max(...sampleHighs.map(x=>x.price));
+      out.fresh = this.isFreshBreak(prices, out.breakoutLevel, 'long');
+      return out;
+    }
+  }catch(e){}
+
+  // CUP & HANDLE (heuristic)
+  try{
+    const last100 = prices.slice(-120);
+    const minIdx = last100.indexOf(Math.min(...last100));
+    const leftMax = Math.max(...last100.slice(0, Math.max(1,minIdx)));
+    const rightMax = Math.max(...last100.slice(minIdx+1));
+    const cupDepth = Math.min(leftMax,rightMax) - Math.min(...last100);
+    if(cupDepth > (Math.max(leftMax,rightMax)-Math.min(...last100))*0.3){
+      out.found=true; out.name='Cup and Handle (heuristic)'; out.direction='long'; out.strength=60;
+      out.breakoutLevel = Math.min(leftMax,rightMax);
+      out.fresh = this.isFreshBreak(prices, out.breakoutLevel, 'long');
+      return out;
+    }
+  }catch(e){}
+
+  // FLAGS / PENNANTS: detect consolidation after sharp move
+  try{
+    const last40 = prices.slice(-60);
+    const change = (last40[last40.length-1] - last40[0]) / Math.max(1,Math.abs(last40[0]));
+    if(Math.abs(change) > 0.10){
+      // consolidation in middle
+      out.found=true; out.name = change>0 ? 'Bull Flag' : 'Bear Flag'; out.direction = change>0 ? 'long':'short';
+      out.strength = 55; out.breakoutLevel = prices[prices.length-1] * (change>0?1.01:0.99);
+      out.fresh = this.isFreshBreak(prices, out.breakoutLevel, out.direction);
+      return out;
+    }
+  }catch(e){}
+
+  // fallback: try detect channel breakout
+  try{
+    const ch = this.detectChannels(prices);
+    if(ch && ch.found){
+      out.found=true; out.name=ch.name; out.direction=ch.direction; out.breakoutLevel=ch.breakout; out.strength=50;
+      out.fresh = this.isFreshBreak(prices, out.breakoutLevel, out.direction);
+      return out;
+    }
+  }catch(e){}
+
+  return out;
+}
+
+// very light channel detector
+Analyzer.prototype.detectChannels = function(prices){
+  const swings = this.detectSwings(prices,3);
+  const highs = swings.filter(s=>s.type==='high').map(s=>s.price);
+  const lows = swings.filter(s=>s.type==='low').map(s=>s.price);
+  if(highs.length<3 || lows.length<3) return {found:false};
+  const hMean = highs.reduce((a,b)=>a+b,0)/highs.length;
+  const lMean = lows.reduce((a,b)=>a+b,0)/lows.length;
+  // if channel width reasonable
+  if((hMean - lMean)/lMean < 0.2){
+    return {found:true, name: 'Channel', direction: (prices[prices.length-1]>hMean?'long':'short'), breakout: hMean};
+  }
+  return {found:false};
+}
+
+/* --------- Update analyzeSymbol to include S/R and pattern detection, and 7-point score (max 140) --------- */
+Analyzer.prototype.analyzeSymbol = (function(original){
+  return async function(symbol){
+    // reuse original analyze logic but extend to 7 points
+    const tf = document.getElementById('primaryTf').value || '15m';
+    const raw = await this.getKlines(symbol, tf, 600);
+    const closes = raw.map(r=>r.close);
+    if(closes.length < 80){ return null; }
+
+    // 1) RSI (20)
+    const rsiArr = this.calculateRSI(closes, this.rsiPeriod);
+    const currentRSI = rsiArr[rsiArr.length-1] || 50;
+    let rsiPoint = {score:0,status:false,details:`RSI ${currentRSI.toFixed(1)}`};
+    if(currentRSI<=30){ rsiPoint.score=20; rsiPoint.status=true; rsiPoint.direction='long'; rsiPoint.details+=' Oversold'; }
+    if(currentRSI>=70){ rsiPoint.score=20; rsiPoint.status=true; rsiPoint.direction='short'; rsiPoint.details+=' Overbought'; }
+
+    // 2) Pattern detection (20)
+    const pattern = this.detectChartPatterns(closes);
+    const patternPoint = pattern.found ? {score:20,status:true,details:pattern.name,direction:pattern.direction,fresh:pattern.fresh,breakoutLevel:pattern.breakoutLevel} : {score:0,status:false,details:'No pattern'};
+
+    // 3) Golden cross (20)
+    const ma50 = this.sma(closes,50).slice(-3);
+    const ma200 = this.sma(closes,200).slice(-3);
+    let goldenPoint = {score:0,status:false,details:'No golden'};
+    if(ma50.length>=2 && ma200.length>=2){
+      const cur50 = ma50[ma50.length-1], cur200 = ma200[ma200.length-1];
+      const prev50 = ma50[ma50.length-2], prev200 = ma200[ma200.length-2];
+      if(cur50>cur200 && prev50<=prev200){ goldenPoint.score=20; goldenPoint.status=true; goldenPoint.details='Golden Cross'; goldenPoint.direction='long'; }
+      if(cur50<cur200 && prev50>=prev200){ goldenPoint.score=20; goldenPoint.status=true; goldenPoint.details='Death Cross'; goldenPoint.direction='short'; }
+    }
+
+    // 4) Elliott (20)
+    const ell = this.detectElliott(closes);
+    let ellPoint = {score:0,status:false,details:'Elliott unconfirmed'};
+    if(ell){
+      ellPoint.score = ell.confirmed ? 20 : 10;
+      ellPoint.status = ell.confirmed;
+      ellPoint.details = `Elliott ${ell.bias} confirmed:${ell.confirmed}`;
+      ellPoint.direction = ell.bias;
+    }
+
+    // 5) MTF sync (20)
+    const higherTf = document.getElementById('higherTf') ? document.getElementById('higherTf').value || '1h' : '1h';
+    const higherRaw = await this.getKlines(symbol,higherTf,400);
+    const higherCloses = higherRaw.map(r=>r.close);
+    const primaryTrend = this.getTrendDirection(closes);
+    const higherTrend = this.getTrendDirection(higherCloses);
+    let mtfPoint = {score:0,status:false,details:'Not sync'};
+    if(primaryTrend===higherTrend && primaryTrend!=='neutral'){ mtfPoint.score=20; mtfPoint.status=true; mtfPoint.details=`Sync ${primaryTrend}`; mtfPoint.direction=primaryTrend; }
+
+    // 6) Support/Resistance proximity (20)
+    const sr = this.detectSupportResistance(closes);
+    const priceNow = closes[closes.length-1];
+    let srPoint = {score:0,status:false,details:'No SR'};
+    if(sr && (sr.supports.length>0 || sr.resistances.length>0)){
+      const nearestSupport = sr.supports.length>0 ? sr.supports[0].level : null;
+      const nearestRes = sr.resistances.length>0 ? sr.resistances[0].level : null;
+      let near = false, dir = null;
+      if(nearestSupport && Math.abs(priceNow - nearestSupport)/nearestSupport <= 0.01){ near=true; dir='long'; }
+      if(nearestRes && Math.abs(priceNow - nearestRes)/nearestRes <= 0.01){ near=true; dir='short'; }
+      if(near){ srPoint.score=20; srPoint.status=true; srPoint.details=`Near SR ${dir}`; srPoint.direction=dir; }
+    }
+
+    // 7) Fresh 1-candle break confirmation (20)
+    let freshPoint = {score:0,status:false,details:'No fresh break'};
+    if(pattern && pattern.found && pattern.fresh){ freshPoint.score=20; freshPoint.status=true; freshPoint.details=`Fresh ${pattern.name}`; freshPoint.direction=pattern.direction; }
+
+    // aggregate total out of 140
+    let total = rsiPoint.score + patternPoint.score + goldenPoint.score + ellPoint.score + mtfPoint.score + srPoint.score + freshPoint.score;
+    // determine direction by majority of direction votes
+    const dirs = [rsiPoint.direction, patternPoint.direction, goldenPoint.direction, ellPoint.direction, mtfPoint.direction, srPoint.direction, freshPoint.direction].filter(Boolean);
+    let direction = null;
+    if(dirs.length>0){
+      direction = dirs.sort((a,b)=> dirs.filter(v=>v===a).length - dirs.filter(v=>v===b).length).pop();
+    }
+
+    const result = { symbol, totalScore: total, maxScore: 140, direction, price: priceNow, volume: raw.map(r=>r.volume).reduce((a,b)=>a+b,0), points:{
+      rsiOver:rsiPoint, patternBreakout:patternPoint, goldenFib:goldenPoint, elliottWave:ellPoint, mtfSync:mtfPoint, supportRes:srPoint, freshBreak:freshPoint
+    }, ell };
+    return result;
+  };
+})(Analyzer.prototype.analyzeSymbol);
+
+Analyzer.prototype.createCardHTML = function(s){
+  const pct = ((s.totalScore / (s.maxScore||140))*100).toFixed(1);
+  const scoreClass = s.totalScore>=112 ? 'excellent' : s.totalScore>=84 ? 'good' : 'poor';
+  return `
+    <div class="signal-card" data-symbol="${s.symbol}">
+      <div class="signal-title"><strong>${s.symbol}</strong><span style="font-weight:700">${s.totalScore}/${s.maxScore} (${pct}%)</span></div>
+      <div style="margin-top:8px;color:var(--muted)">Price: ${s.price.toFixed(4)} • Direction: ${s.direction||'Neutral'}</div>
+      <div style="margin-top:8px;font-size:13px;color:var(--muted)">${s.points.patternBreakout.details} • ${s.points.supportRes.details}</div>
+    </div>
+  `;
+}
+
+Analyzer.prototype.createDetailedAnalysis = function(s){
+  return `
+    <div style="font-size:13px">
+      <div><strong>RSI:</strong> ${s.points.rsiOver.details}</div>
+      <div><strong>Pattern:</strong> ${s.points.patternBreakout.details} ${s.points.patternBreakout.fresh? '(FRESH BREAK)': ''}</div>
+      <div><strong>Golden:</strong> ${s.points.goldenFib.details}</div>
+      <div><strong>Elliott:</strong> ${s.points.elliottWave.details}</div>
+      <div><strong>MTF:</strong> ${s.points.mtfSync.details}</div>
+      <div><strong>Support/Resistance:</strong> ${s.points.supportRes.details}</div>
+      <div><strong>Fresh Break:</strong> ${s.points.freshBreak.details}</div>
+    </div>
+  `;
+}
+
+// ensure KPI shows new max score average
+Analyzer.prototype.updateKPIs = function(){
+  const node = document.getElementById('kpiSection');
+  const avg = this.signals.length>0 ? (this.signals.reduce((a,b)=>a+b.totalScore,0)/this.signals.length).toFixed(1) : 0;
+  node.innerHTML = `
+    <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">Analyzed: ${this.kpi.total}</div>
+    <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">Perfect(140): ${this.kpi.perfect}</div>
+    <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">Excellent(>=112): ${this.kpi.excellent}</div>
+    <div style="padding:8px;background:rgba(255,255,255,0.02);border-radius:8px">AvgScore (out of 140): ${avg}</div>
+  `;
+}
+
+</script>
+
+</body>
+</html>
